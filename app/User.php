@@ -103,7 +103,7 @@ class User extends Authenticatable
     public function feed_microposts()
     {
         // このユーザがフォロー中のユーザのidを取得して配列にする
-        $userId = $this->followings()->pluck('user_id')->toArray();
+        $userId = $this->followings()->pluck('users_id')->toArray();
         // このユーザのidもその配列に追加
         $userIds[] =$this->id;
         // それらのユーザが所有する投稿に絞り込む
