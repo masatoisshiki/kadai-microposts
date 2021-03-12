@@ -10,7 +10,7 @@
             {{-- タブ --}}
             @include('users.navtabs')
             {{-- お気に入り一覧 --}}
-            @include('microposts.microposts')
+            @include('microposts.favorite')
         </div>
     </div>
 @endsection
