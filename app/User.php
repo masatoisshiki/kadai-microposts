@@ -120,49 +120,33 @@ class User extends Authenticatable
     // お気に入り一覧を取得
     public function favorites()
     {
-        return $this->belongsToMany(User::class, 'favorites', 'user_id', 'micropost_id')->withTimestamps();
+        return $this->belongsToMany(Micropost::class, 'favorites', 'user_id', 'micropost_id')->withTimestamps();
     }
     
     // 指定された $micropostIdをお気に入りに追加していか調べる。追加しているならtrueを返す。
     public function is_favorite($micropostId)
     {
-        // お気に入りに追加した中に $userIdのものが存在するか
-        return $this->favorites()->where('user_id', $micropostId)->exists();
+        // お気に入りに追加した中に $micropostrIdのものが存在するか
+        return $this->favorites()->where('micropost_id', $micropostId)->exists();
     }
     
-    // $micropostIdで指定された投稿を追加する。
+    // $micropostIdで指定された投稿をお気に入りに追加/削除する。
     
     public function favorite($micropostId)
     {
-        // すでにお気に入りにしているかの確認
-        $exist = $this->is_favorite($micropostId);
-        // 対象が自分自身の投稿かどうかの確認
-        $its_me = $this->id == $micropostId;
-        
-        if($exist || $its_me) {
-            // すでに追加していれば何もしない
-            return false;
-        } else {
-            // 未追加であればお気に入りに追加する
+        if(!$this->is_favorite($micropostId)) {
             $this->favorites()->attach($micropostId);
             return true;
         }
+            return false;
     }
     
     public function unfavorite($micropostId)
     {
-        // すでにお気に入りにしているかの確認
-        $exist = $this->is_favorite($micropostId);
-        // 対象が自分自身の投稿かどうかの確認
-        $its_me_post = $this->id == $micropostId;
-        
-        if($exist && !$its_me) {
-            // すでに追加していればお気に入りを外す
+        if($this->is_favorite($micropostId)) {
             $this->favorites()->detach($micropostId);
             return true;
-        }else{
-            // 未追加であれば何もしない
-            return false;
         }
+            return false;
     }
 }

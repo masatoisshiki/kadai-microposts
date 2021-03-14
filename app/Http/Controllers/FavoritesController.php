@@ -9,7 +9,7 @@ class FavoritesController extends Controller
     public function store($micropostId)
     {
         // 認証済みユーザ（閲覧者）が、 投稿をお気に入りに追加する
-        \Auth::user()->favorites($micropostId);
+        \Auth::user()->favorite($micropostId);
         // 前のURLへリダイレクトさせる
         return back();
     }
